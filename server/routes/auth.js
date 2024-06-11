@@ -11,7 +11,7 @@ router.post(
       .trim()
       .notEmpty()
       .withMessage("Name must have!!")
-      .isLength({ max: 10 })
+      .isLength({ max: 20 })
       .withMessage("Name mush have at least 10!!")
       .isLength({ min: 3 })
       .withMessage("Name must have at least 3!! "),

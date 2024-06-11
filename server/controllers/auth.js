@@ -17,7 +17,7 @@ exports.register = async (req, res, next) => {
   try {
     const userDoc = await User.findOne({ email });
     if (userDoc) {
-      throw new Error("User already exists!!");
+      throw new Error("Email is already exists!!");
     }
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(password, salt);
@@ -43,7 +43,7 @@ exports.login = async (req, res, next) => {
   try {
     const userDoc = await User.findOne({ email });
     if (!userDoc) {
-      throw new Error("User does not exist!!");
+      throw new Error("Email does not exist!!");
     }
     const isMatch = await bcrypt.compare(password, userDoc.password);
     if (!isMatch) {

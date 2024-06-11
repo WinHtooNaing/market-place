@@ -1,95 +1,121 @@
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Checkbox, Form, Input, Spin, message } from "antd";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-const onFinish = (values) => {
-  console.log("Success:", values);
-};
-const onFinishFailed = () => {
-  toast.error("Login Failed", {
-    position: "top-right",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "light",
-    transition: Bounce,
-  });
-};
-const Login = () => (
-  <section className="h-screen w-full flex items-center justify-center">
-    <ToastContainer
-      position="top-right"
-      autoClose={5000}
-      hideProgressBar={false}
-      newestOnTop={false}
-      closeOnClick
-      rtl={false}
-      pauseOnFocusLoss
-      draggable
-      pauseOnHover
-      theme="light"
-    />
-    {/* Same as */}
-    <ToastContainer />
-    <div className="w-3/5 md:w-[450px]">
-      <h1 className="font-bold text-3xl text-blue-600 text-center mb-5">
-        POINT.IO - LOGIN
-      </h1>
-      <Form
-        name="basic"
-        initialValues={{
-          remember: true,
-        }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        autoComplete="off"
-        layout="vertical"
-      >
-        <Form.Item
-          label="Email"
-          name="email"
-          rules={[
-            {
-              required: true,
-              message: "Please input your email!",
-            },
-            {
-              type: "email",
-              message: "Invalid your email",
-            },
-          ]}
-          hasFeedback
+import { login } from "../api/auth";
+import { useState } from "react";
+
+const Login = () => {
+  const [loading, setLoading] = useState(false);
+  const onFinish = async (values) => {
+    setLoading(true);
+    try {
+      const response = await login(values);
+      if (response.isSuccess) {
+        message.success(response.message);
+        localStorage.setItem("token", response.token);
+        setLoading(false);
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (err) {
+      message.error(err.message);
+      setLoading(false);
+    }
+  };
+  const onFinishFailed = () => {
+    toast.error("Login Failed", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    });
+    setLoading(false);
+  };
+  return (
+    <section className="h-screen w-full flex items-center justify-center">
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      {/* Same as */}
+      <ToastContainer />
+      <div className="w-3/5 md:w-[450px]">
+        <h1 className="font-bold text-3xl text-blue-600 text-center mb-5">
+          POINT.IO - LOGIN
+        </h1>
+        <Form
+          name="basic"
+          initialValues={{
+            remember: true,
+          }}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+          autoComplete="off"
+          layout="vertical"
         >
-          <Input />
-        </Form.Item>
+          <Form.Item
+            label="Email"
+            name="email"
+            rules={[
+              {
+                required: true,
+                message: "Please input your email!",
+              },
+              {
+                type: "email",
+                message: "Invalid your email",
+              },
+            ]}
+            hasFeedback
+          >
+            <Input />
+          </Form.Item>
 
-        <Form.Item
-          label="Password"
-          name="password"
-          rules={[
-            {
-              required: true,
-              message: "Please input your password!",
-            },
-          ]}
-          hasFeedback
-        >
-          <Input.Password />
-        </Form.Item>
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={[
+              {
+                required: true,
+                message: "Please input your password!",
+              },
+            ]}
+            hasFeedback
+          >
+            <Input.Password />
+          </Form.Item>
 
-        <Form.Item name="remember" valuePropName="checked">
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item>
+          <Form.Item name="remember" valuePropName="checked">
+            <Checkbox>Remember me</Checkbox>
+          </Form.Item>
 
-        <Form.Item>
-          <Button type="primary" htmlType="submit" className="w-full">
-            Login
-          </Button>
-        </Form.Item>
-      </Form>
-    </div>
-  </section>
-);
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="w-full"
+              disabled={loading}
+            >
+              Login
+              {loading && <Spin />}
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
+    </section>
+  );
+};
 export default Login;
