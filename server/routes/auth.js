@@ -3,6 +3,7 @@ const { body } = require("express-validator");
 const router = Router();
 
 const authController = require("../controllers/auth");
+const authMiddleware = require("../middlewares/auth");
 
 router.post(
   "/register",
@@ -36,5 +37,9 @@ router.post(
   ],
   authController.login
 );
-
+router.get(
+  "/get-current-user",
+  authMiddleware,
+  authController.checkCurrentUser
+);
 module.exports = router;

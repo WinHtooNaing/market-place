@@ -21,3 +21,14 @@ export const login = async (payload) => {
     return error.message;
   }
 };
+
+export const checkCurrentUser = async () => {
+  try {
+    const response = await axiosInstance.get("/get-current-user", {
+      validateStatus: () => true,
+    });
+    return response.data;
+  } catch (error) {
+    return error.message;
+  }
+};

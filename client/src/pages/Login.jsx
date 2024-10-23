@@ -3,9 +3,14 @@ import { ToastContainer, toast, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { login } from "../api/auth";
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUser } from "../store/slices/userSlice";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const onFinish = async (values) => {
     setLoading(true);
     try {
@@ -13,7 +18,9 @@ const Login = () => {
       if (response.isSuccess) {
         message.success(response.message);
         localStorage.setItem("token", response.token);
+        dispatch(setUser(response.token));
         setLoading(false);
+        navigate("/");
       } else {
         throw new Error(response.message);
       }
@@ -114,6 +121,12 @@ const Login = () => {
             </Button>
           </Form.Item>
         </Form>
+        <p className="text-center">
+          Do not have an account?{" "}
+          <Link to={"/register"} className="text-blue-500">
+            Register
+          </Link>
+        </p>
       </div>
     </section>
   );

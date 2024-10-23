@@ -3,6 +3,7 @@ import { ToastContainer, toast, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { register } from "../api/auth";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Register = () => {
   const [loading, setLoading] = useState(false);
@@ -141,6 +142,12 @@ const Register = () => {
               </Button>
             </Form.Item>
           </Form>
+          <p className="text-center">
+            Do you have an account?
+            <Link to={"/login"} className="text-blue-500">
+              Login
+            </Link>
+          </p>
         </div>
       </section>
     </>
