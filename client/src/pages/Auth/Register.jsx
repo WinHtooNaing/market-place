@@ -1,7 +1,7 @@
 import { Button, Checkbox, Form, Input, Spin, message } from "antd";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { register } from "../api/auth";
+import { register } from "../../api/auth";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 

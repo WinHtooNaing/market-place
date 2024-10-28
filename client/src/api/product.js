@@ -45,3 +45,41 @@ export const deleteProduct = async (id) => {
     return error.message;
   }
 };
+
+// upload images
+export const uploadImage = async (formData) => {
+  try {
+    const response = await axiosInstance.post("/upload", formData, {
+      validateStatus: () => true,
+    });
+    return response.data;
+  } catch (error) {
+    return error.message;
+  }
+};
+
+export const getSavedImages = async (id) => {
+  try {
+    const response = await axiosInstance.get(`/product-images/${id}`, {
+      validateStatus: () => true,
+    });
+    return response.data;
+  } catch (error) {
+    return error.message;
+  }
+};
+export const deleteSavedImages = async (payload) => {
+  try {
+    const { productId, imgToDelete } = payload;
+    const encodeImgToDelete = encodeURIComponent(imgToDelete);
+    const response = await axiosInstance.delete(
+      `/products/images/destroy/${productId}/${encodeImgToDelete}`,
+      {
+        validateStatus: () => true,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    return error.message;
+  }
+};

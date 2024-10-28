@@ -1,11 +1,11 @@
 import { Button, Checkbox, Form, Input, Spin, message } from "antd";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { login } from "../api/auth";
+import { login } from "../../api/auth";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setUser } from "../store/slices/userSlice";
+import { setUser } from "../../store/slices/userSlice";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);

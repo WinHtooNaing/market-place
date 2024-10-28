@@ -7,11 +7,18 @@ const Product = ({
   setEditMode,
   setEditProductId,
   getProducts,
+  setManageTabKey,
 }) => {
   const editHandler = (product_id) => {
     setEditMode(true);
     setActiveTabKey("2");
     setEditProductId(product_id);
+  };
+  const uploadHandler = (product_id) => {
+    setEditMode(true);
+    setActiveTabKey("2");
+    setEditProductId(product_id);
+    setManageTabKey("2");
   };
   const deleteHandler = async (product_id) => {
     try {
@@ -89,6 +96,15 @@ const Product = ({
                     </td>
 
                     <td className="px-6 py-4">
+                      <button
+                        type="button"
+                        className="font-medium text-green-600 dark:text-blue-500 hover:underline me-3"
+                        onClick={() => {
+                          uploadHandler(product._id);
+                        }}
+                      >
+                        Upload
+                      </button>
                       <button
                         type="button"
                         className="font-medium text-blue-600 dark:text-blue-500 hover:underline me-3"
