@@ -6,11 +6,18 @@ import {
   getSavedImages,
   uploadImage,
 } from "../../api/product";
+// import { useDispatch, useSelector } from "react-redux";
+// import { setLoader } from "../../store/slices/loaderSlice";
+
 const Upload = ({ editProductId, setActiveTabKey }) => {
   const [previewImages, setPreviewImages] = useState([]);
   const [images, setImages] = useState([]);
   const [savedImages, setSavedImages] = useState([]);
   const [selectedImagesCount, setSelectedImagesCount] = useState(0);
+
+  // const { isProcessing } = useSelector((state) => state.reducer.loader);
+  // const dispatch = useDispatch();
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const getImages = async (product_id) => {
     try {
@@ -59,6 +66,8 @@ const Upload = ({ editProductId, setActiveTabKey }) => {
   };
   const submitHandler = async (e) => {
     e.preventDefault();
+    // dispatch(setLoader(true));
+    setIsProcessing(true);
     if (selectedImagesCount > 1) {
       const formData = new FormData();
       for (let i = 0; i < images.length; i++) {
@@ -74,8 +83,11 @@ const Upload = ({ editProductId, setActiveTabKey }) => {
       } catch (err) {
         message.error(err.message);
       }
+      // dispatch(setLoader(false));
+      setIsProcessing(false);
     } else {
       message.error("Please select at least two images");
+      setIsProcessing(false);
     }
   };
   const savedImageDeleteHandler = async (img) => {
@@ -164,8 +176,11 @@ const Upload = ({ editProductId, setActiveTabKey }) => {
               </div>
             ))}
         </div>
-        <button className="block my-4 text-white bg-blue-600 rounded-md px-3 py-2 font-medium">
-          Upload
+        <button
+          disabled={isProcessing}
+          className="block my-4 text-white bg-blue-600 rounded-md px-3 py-2 font-medium"
+        >
+          {isProcessing ? "Uploading..." : "Upload"}
         </button>
       </form>
     </section>

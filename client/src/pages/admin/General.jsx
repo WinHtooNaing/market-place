@@ -1,13 +1,11 @@
-import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../../store/slices/userSlice";
-import { useNavigate } from "react-router-dom";
 import { PowerIcon } from "@heroicons/react/24/outline";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { setUser } from "../../store/slices/userSlice";
 const General = () => {
-  const { email, name, role } = useSelector((state) => state.reducer.user.user);
-
+  const { name, email, role } = useSelector((state) => state.reducer.user.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const logoutHandler = () => {
     localStorage.removeItem("token");
     dispatch(setUser(null));

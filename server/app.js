@@ -25,6 +25,7 @@ const filterConfigure = (req, file, cb) => {
 
 const authRoute = require("./routes/auth");
 const productRoute = require("./routes/product");
+const adminRoute = require("./routes/admin");
 
 const app = express();
 
@@ -39,6 +40,7 @@ app.use(
 
 app.use(authRoute);
 app.use(productRoute);
+app.use("/admin", adminRoute);
 
 mongoose
   .connect(process.env.MONGO_URL)

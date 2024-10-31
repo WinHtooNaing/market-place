@@ -10,10 +10,20 @@ const Nav = () => {
         POINT.IO
       </Link>
       {user ? (
-        <Link to={"/profile"} className="flex items-end text-xl ">
-          <UserIcon width={25} />
-          profile
-        </Link>
+        <>
+          {user.role === "user" && (
+            <Link to={"/profile"} className="  px-2 py-1 flex items-end gap-1">
+              <UserIcon width={26} />
+              profile
+            </Link>
+          )}
+          {user.role === "admin" && (
+            <Link to={"/admin"} className="  px-2 py-1 flex items-end gap-1">
+              <UserIcon width={26} />
+              Admin Pannel
+            </Link>
+          )}
+        </>
       ) : (
         <div className="flex gap-4 text-xl font-semibold ">
           <Link to={"/login"} className="hover:text-blue-300">

@@ -49,6 +49,12 @@ exports.login = async (req, res, next) => {
     if (!isMatch) {
       throw new Error("Invalid your password!!");
     }
+
+    // account status check
+    if (userDoc.status === "banned") {
+      throw new Error("This account was banned.");
+    }
+
     // create jwt token
     const token = jwt.sign(
       { email: userDoc.email, userId: userDoc._id },

@@ -19,6 +19,10 @@ const userSchema = new Schema({
     type: String,
     default: "user",
   },
+  status: {
+    type: String,
+    default: "active",
+  },
 });
 
 const userModel = model("User", userSchema);

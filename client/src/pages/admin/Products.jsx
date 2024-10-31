@@ -1,28 +1,14 @@
-import { message } from "antd";
 import moment from "moment";
-import { deleteProduct } from "../../api/product";
-const Product = ({
-  products,
-  setActiveTabKey,
-  setEditMode,
-  setEditProductId,
-  getProducts,
-  setManageTabKey,
-}) => {
-  const editHandler = (product_id) => {
-    setEditMode(true);
-    setActiveTabKey("2");
-    setEditProductId(product_id);
-  };
-  const uploadHandler = (product_id) => {
-    setEditMode(true);
-    setActiveTabKey("2");
-    setEditProductId(product_id);
-    setManageTabKey("2");
-  };
-  const deleteHandler = async (product_id) => {
+import { message } from "antd";
+import {
+  approveProduct,
+  rejectProduct,
+  rollbackProduct,
+} from "../../api/admin";
+const Products = ({ products, getProducts }) => {
+  const approveHandler = async (productId) => {
     try {
-      const response = await deleteProduct(product_id);
+      const response = await approveProduct(productId);
       if (response.isSuccess) {
         message.success(response.message);
         getProducts();
@@ -33,6 +19,33 @@ const Product = ({
       message.error(err.message);
     }
   };
+  const rejectHandler = async (productId) => {
+    try {
+      const response = await rejectProduct(productId);
+      if (response.isSuccess) {
+        message.success(response.message);
+        getProducts();
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (err) {
+      message.error(err.message);
+    }
+  };
+  const rollbackHandler = async (productId) => {
+    try {
+      const response = await rollbackProduct(productId);
+      if (response.isSuccess) {
+        message.success(response.message);
+        getProducts();
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (err) {
+      message.error(err.message);
+    }
+  };
+
   return (
     <section>
       <h1 className=" text-3xl font-semibold my-2">Products List</h1>
@@ -45,6 +58,9 @@ const Product = ({
               </th>
               <th scope="col" className="px-6 py-3">
                 Category
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Seller
               </th>
               <th scope="col" className="px-6 py-3">
                 Sell Date
@@ -69,6 +85,7 @@ const Product = ({
                       {product.name}
                     </th>
                     <td className="px-6 py-4">{product.category}</td>
+                    <td className="px-6 py-4">{product.seller.name}</td>
                     <td className="px-6 py-4">
                       {moment(product.createdAt).format("L")}
                     </td>
@@ -90,33 +107,48 @@ const Product = ({
                       )}
                     </td>
                     <td className="px-6 py-4">
-                      <button
-                        type="button"
-                        className="font-medium text-green-600 hover:underline me-4"
-                        onClick={() => {
-                          uploadHandler(product._id);
-                        }}
-                      >
-                        Upload
-                      </button>
-                      <button
-                        type="button"
-                        className="font-medium text-blue-600 hover:underline me-4"
-                        onClick={() => {
-                          editHandler(product._id);
-                        }}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        type="button"
-                        className="font-medium text-red-500 hover:underline"
-                        onClick={() => {
-                          deleteHandler(product._id);
-                        }}
-                      >
-                        Delete
-                      </button>
+                      {product.status === "approve" ? (
+                        <button
+                          type="button"
+                          className="font-medium text-blue-600 hover:underline me-4"
+                          onClick={() => {
+                            rollbackHandler(product._id);
+                          }}
+                        >
+                          Roll Back
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className="font-medium text-blue-600 hover:underline me-4"
+                          onClick={() => {
+                            approveHandler(product._id);
+                          }}
+                        >
+                          Approve
+                        </button>
+                      )}
+                      {product.status === "reject" ? (
+                        <button
+                          type="button"
+                          className="font-medium text-red-600 hover:underline me-4"
+                          onClick={() => {
+                            rollbackHandler(product._id);
+                          }}
+                        >
+                          Roll Back
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className="font-medium text-red-600 hover:underline me-4"
+                          onClick={() => {
+                            rejectHandler(product._id);
+                          }}
+                        >
+                          Reject
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -131,4 +163,4 @@ const Product = ({
   );
 };
 
-export default Product;
+export default Products;

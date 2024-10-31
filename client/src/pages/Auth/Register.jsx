@@ -3,9 +3,10 @@ import { ToastContainer, toast, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { register } from "../../api/auth";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const onFinish = async (values) => {
     setLoading(true);
@@ -13,6 +14,7 @@ const Register = () => {
       const response = await register(values);
       if (response.isSuccess) {
         message.success(response.message);
+        navigate("/login");
       } else {
         throw new Error(response.message);
       }
