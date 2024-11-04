@@ -3,7 +3,7 @@ import Nav from "../components/Nav";
 
 const Main = () => {
   return (
-    <section>
+    <section className="bg-gray-100">
       <Nav />
       <Outlet />
     </section>

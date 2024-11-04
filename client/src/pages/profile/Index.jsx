@@ -11,6 +11,7 @@ import Notification from "./Notification";
 import General from "./General";
 import { useEffect, useState } from "react";
 import { getAllProducts } from "../../api/product";
+import { getAllNoti } from "../../api/notification";
 
 const Index = () => {
   const [products, setProducts] = useState([]);
@@ -18,6 +19,7 @@ const Index = () => {
   const [editProductId, setEditProductId] = useState(null);
   const [activeTabKey, setActiveTabKey] = useState("1");
   const [manageTabKey, setManageTabKey] = useState("1");
+  const [notifications, setNotifications] = useState([]);
 
   const getProducts = async () => {
     try {
@@ -31,12 +33,25 @@ const Index = () => {
       message.error(err.message);
     }
   };
+  const getNoti = async () => {
+    try {
+      const response = await getAllNoti();
+      if (response.isSuccess) {
+        setNotifications(response.notiDocs);
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
   useEffect(() => {
     if (activeTabKey === "1") {
       setEditMode(false);
       setEditProductId(null);
     }
     getProducts();
+    getNoti();
   }, [activeTabKey]);
 
   const items = [
@@ -85,7 +100,9 @@ const Index = () => {
           Notifications
         </span>
       ),
-      children: <Notification />,
+      children: (
+        <Notification notifications={notifications} getNoti={getNoti} />
+      ),
     },
     {
       key: "4",
@@ -102,7 +119,7 @@ const Index = () => {
     setActiveTabKey(key);
   };
   return (
-    <section>
+    <section className="w-[90%] ml-[5%] mt-5">
       <Tabs
         activeKey={activeTabKey}
         onChange={(key) => onChangeHandler(key)}

@@ -1,6 +1,5 @@
 import { message, Tabs } from "antd";
 import {
-  BellAlertIcon,
   ChartBarIcon,
   SwatchIcon,
   UserIcon,
@@ -11,7 +10,6 @@ import { useEffect, useState } from "react";
 import Products from "./Products";
 import Dashboard from "./Dashboard";
 import Users from "./Users";
-import Notification from "./Notification";
 import General from "./General";
 import { getAllProducts, getAllUsers } from "../../api/admin";
 import { useSelector } from "react-redux";
@@ -102,18 +100,9 @@ const Index = () => {
       ),
       children: <Users users={users} getUsers={getUsers} />,
     },
+
     {
       key: "4",
-      label: (
-        <span className="flex items-start gap-2">
-          <BellAlertIcon width={20} />
-          Notifications
-        </span>
-      ),
-      children: <Notification />,
-    },
-    {
-      key: "5",
       label: (
         <span className="flex items-start gap-2">
           <UserIcon width={20} />
@@ -127,7 +116,7 @@ const Index = () => {
     setActiveTabKey(key);
   };
   return (
-    <section>
+    <section className="w-[90%] ml-[5%] mt-5">
       <Tabs
         activeKey={activeTabKey}
         onChange={(key) => onChangeHandler(key)}
